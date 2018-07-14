@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2015",
+    "jsx": "react",
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "strictNullChecks": true,
+    "moduleResolution": "node",
+    "lib": ["dom", "es2015", "es2017"],
+    "experimentalDecorators": true,
+    "baseUrl": "./",
+    "outDir": "./dist",
+    "paths": {
+      "@number-p/*": ["./src"]
+    }
+  },
+  "exclude": ["./node_modules"]
+}

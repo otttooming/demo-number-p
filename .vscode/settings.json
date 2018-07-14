@@ -1,0 +1,12 @@
+{
+    "editor.formatOnSave": true,
+    "editor.formatOnType": false,
+    "search.exclude": {
+      "**/.git": true,
+      "**/.next": true,
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/coverage": true
+    }
+  }
+  
