@@ -1,14 +1,19 @@
 import * as Koa from "koa";
-import * as Router from "koa-router";
+import StatusController from "./controllers/status";
 
-const app = new Koa();
-const router = new Router();
+class Server {
+  public app: Koa;
 
-router.get("/", ctx => {
-  ctx.body = "Hello World!";
-});
+  constructor() {
+    this.app = new Koa();
+    this.routes();
+  }
 
-app.use(router.routes());
+  private routes() {
+    this.app.use(StatusController.routes());
+  }
+}
 
-app.listen(3007);
+new Server().app.listen(3007);
+
 console.log("listening on 3007");
