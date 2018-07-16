@@ -1,4 +1,5 @@
 import * as Koa from "koa";
+import { Pageable, IndexedPage, paginate } from "@panderalabs/koa-pageable";
 
 export class RenderCtx {
   constructor() {}
@@ -10,10 +11,12 @@ export class RenderCtx {
     data: any
   ) {
     ctx.status = status;
+    const pageable: Pageable = ctx.state.pageable;
 
     ctx.body = {
       success: true,
       type: type,
+      pageable,
       data: data,
     };
   }
@@ -25,9 +28,12 @@ export class RenderCtx {
     errors: any
   ) {
     ctx.status = status;
+    const pageable: Pageable = ctx.state.pageable;
+
     ctx.body = {
       success: false,
       type: type,
+      pageable,
       errors: errors,
     };
   }

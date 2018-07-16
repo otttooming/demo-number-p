@@ -7,6 +7,7 @@ import StatusController from "./controllers/status";
 import ImportController from "./controllers/import";
 import * as koaBody from "koa-body";
 import MongooseLib from "./components/mongoose";
+import { Pageable, IndexedPage, paginate } from "@panderalabs/koa-pageable";
 
 class Server {
   public app: Koa;
@@ -22,6 +23,7 @@ class Server {
 
   private middelwares() {
     this.app.use(koaBody({ multipart: true }));
+    this.app.use(paginate);
   }
 
   private routes() {
