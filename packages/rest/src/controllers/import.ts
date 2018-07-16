@@ -5,17 +5,10 @@ import * as csvtojson from "csvtojson";
 import { RenderCtx } from "../components/render";
 import { IController } from "../typings/controller.interface";
 import { KoaRequestOverride } from "../typings/request.interface";
-
-export interface Person {
-  id: number;
-  name: string;
-  age: number;
-  address: string;
-  team: string;
-}
+import { IPersonModel, Person, IPerson } from "../models/person";
 
 export enum PersonHeaders {
-  ID = "id",
+  PERSONID = "personId",
   NAME = "name",
   AGE = "age",
   ADDRESS = "address",
@@ -39,7 +32,7 @@ class ImportController implements IController {
     this.request = ctx.request as KoaRequestOverride;
 
     if (this.request && this.request.files) {
-      const persons: Person[] = await this.getParsedCsvToJson();
+      const persons: IPerson[] = await this.getParsedCsvToJson();
 
       const renderData = {
         body: `Successfully imported ${persons.length} persons`,
@@ -62,7 +55,7 @@ class ImportController implements IController {
     return fs.createReadStream(this.request.files.source.path, "utf8");
   };
 
-  private getParsedCsvToJson = async (): Promise<Person[]> => {
+  private getParsedCsvToJson = async (): Promise<IPerson[]> => {
     const file: fs.ReadStream | undefined = this.getFile();
 
     if (!file) {
@@ -70,7 +63,7 @@ class ImportController implements IController {
     }
 
     const headers: string[] = Object.values(PersonHeaders);
-    const persons: Person[] = [];
+    const persons: IPerson[] = [];
 
     await csvtojson({
       headers,
@@ -82,11 +75,19 @@ class ImportController implements IController {
         return new Promise((resolve, reject) => {
           persons.push(json);
 
+          this.create(json);
+
           return resolve();
         });
       });
 
     return persons;
+  };
+
+  private create = async (person: IPerson) => {
+    const personEntry: IPersonModel = new Person(person);
+
+    await personEntry.save();
   };
 }
 
