@@ -4,6 +4,7 @@ process.env.NODE_CONFIG_DIR = "./src/config";
 import * as config from "config";
 
 import StatusController from "./controllers/status";
+import SearchController from "./controllers/search";
 import ImportController from "./controllers/import";
 import * as koaBody from "koa-body";
 import MongooseLib from "./components/mongoose";
@@ -28,6 +29,7 @@ class Server {
 
   private routes() {
     this.app.use(StatusController.routes());
+    this.app.use(SearchController.routes());
     this.app.use(ImportController.routes());
   }
 }
