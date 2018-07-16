@@ -3,6 +3,7 @@ import * as Koa from "koa";
 import { RenderCtx } from "../components/render";
 import { IController } from "../typings/controller.interface";
 import { IPersonModel, Person, IPerson } from "../models/person";
+import { Pageable } from "@panderalabs/koa-pageable";
 
 class SearchController implements IController {
   private Router = new Router({
@@ -18,7 +19,12 @@ class SearchController implements IController {
   }
 
   private async status(ctx: Koa.Context) {
-    const books: Array<IPersonModel> = await Person.find({});
+    const pageable: Pageable = ctx.state.pageable;
+
+    const books: Array<IPersonModel> = await Person.find({})
+      .limit(pageable.size)
+      .skip(pageable.page);
+
     const booksData: Array<IPerson> = books.map((book: IPersonModel) =>
       book.toPlainObject()
     );
