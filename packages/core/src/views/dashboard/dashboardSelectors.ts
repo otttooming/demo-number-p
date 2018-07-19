@@ -8,3 +8,5 @@ export const selectStatus = createSelector(getStatus, status => {
     status,
   };
 });
+
+export const getUpload = (state: GlobalState) => state.dashboardReducer.upload;

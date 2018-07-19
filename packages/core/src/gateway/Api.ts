@@ -1,3 +1,5 @@
+import * as axios from "axios";
+
 export type RestParams = { [name: string]: any };
 
 export enum RestMethod {
@@ -19,6 +21,11 @@ class PageableUrlParams {
 
 export default class Api implements ApiProvider {
   private host: string = "http://localhost:3007";
+  private api: axios.AxiosInstance;
+
+  constructor() {
+    this.api = axios.default.create({ baseURL: this.host });
+  }
 
   private createUrl(url: string): string {
     return `${this.host}${url}`;
@@ -33,11 +40,21 @@ export default class Api implements ApiProvider {
   }
 
   private async getRequest(url: string, method: RestMethod, data?: RestParams) {
-    return await fetch(this.createUrl(url), {
+    const headers: { [key: string]: string } = {};
+    headers["Accept"] = "application/json";
+    if (data instanceof FormData) {
+      headers["Content-Type"] = "multipart/form-data";
+    }
+
+    const config: axios.AxiosRequestConfig = {
       method,
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-      },
-    });
+      headers,
+    };
+
+    if (method === RestMethod.POST) {
+      return await this.api.post(url, data, config);
+    }
+
+    return await this.api.get(url, config);
   }
 }
