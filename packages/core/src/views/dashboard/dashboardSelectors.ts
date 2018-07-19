@@ -10,3 +10,6 @@ export const selectStatus = createSelector(getStatus, status => {
 });
 
 export const getUpload = (state: GlobalState) => state.dashboardReducer.upload;
+
+export const getUploadStatus = (state: GlobalState) =>
+  state.dashboardReducer.uploadStatus;

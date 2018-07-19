@@ -1,9 +1,11 @@
 import * as React from "react";
 import { Dispatchable0, Dispatchable1 } from "redux-dispatchers";
+import { RequestStatus } from "../../gateway/Api";
 
 export interface StateProps {
   status: string | null;
   upload: any;
+  uploadStatus: RequestStatus | undefined;
 }
 
 export interface DispatchProps {
@@ -29,13 +31,17 @@ class DashboardView extends React.Component<DashboardViewProps, InternalState> {
   };
 
   render() {
+    const progress: number | null = this.props.uploadStatus
+      ? this.props.uploadStatus.progress
+      : null;
+
     return (
       <div>
         <div>Message: {this.props.status || "no message"}</div>
         <button onClick={this.props.getPersons}>Click me</button>
 
         <form onSubmit={this.onFormSubmit}>
-          <h1>File Upload</h1>
+          <h1>File Upload: {progress}</h1>
           <input type="file" onChange={this.onChange} />
           <button type="submit">Upload</button>
         </form>
