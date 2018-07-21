@@ -1,9 +1,22 @@
 import { createAction } from "redux-actions";
 import { Dispatch, Action } from "redux";
 import gw from "../../gateway/gateway";
-import { RequestStatus } from "../../gateway/Api";
+import {
+  RequestStatus,
+  PageableRequest,
+  Page,
+  RequestResponse,
+} from "../../gateway/Api";
 
 const ns: string = "dashboard/";
+
+export interface IPerson {
+  personId: number;
+  name: string;
+  age: number;
+  address: string;
+  team: string;
+}
 
 export interface IGetPersonsResponse {
   status: string;
@@ -14,14 +27,14 @@ export const getPersonsRequest = createAction(`${ns}GET_PERSONS_REQUEST`);
 export const getPersonsSuccess = createAction(`${ns}GET_PERSONS_SUCCESS`);
 export const getPersonsError = createAction(`${ns}GET_PERSONS_ERROR`);
 
-export const getPersons = () => {
+export const getPersons = (request: PageableRequest) => {
   return async (dispatch: Dispatch) => {
     try {
       dispatch(getPersonsRequest());
 
-      const response: IGetPersonsResponse = {
-        status: "Hello world!",
-      };
+      const response: RequestResponse<
+        Page<IPerson>[]
+      > = await gw.persons.getPersons(request);
 
       dispatch(getPersonsSuccess(response));
     } catch (error) {

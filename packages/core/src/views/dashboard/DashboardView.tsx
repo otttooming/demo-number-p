@@ -1,15 +1,17 @@
 import * as React from "react";
 import { Dispatchable0, Dispatchable1 } from "redux-dispatchers";
-import { RequestStatus } from "../../gateway/Api";
+import { RequestStatus, PageableRequest, Page } from "../../gateway/Api";
+import { IPerson } from "./dashboardActions";
 
 export interface StateProps {
   status: string | null;
   upload: any;
   uploadStatus: RequestStatus | undefined;
+  persons: Page<IPerson>[] | null;
 }
 
 export interface DispatchProps {
-  getPersons: Dispatchable0;
+  getPersons: Dispatchable1<PageableRequest>;
   uploadCsv: Dispatchable1<Blob>;
 }
 
@@ -30,6 +32,16 @@ class DashboardView extends React.Component<DashboardViewProps, InternalState> {
     this.props.uploadCsv(e.target.files[0]);
   };
 
+  handleGetPersons = (e: any) => {
+    const request: PageableRequest = {
+      size: 30,
+      number: 1,
+      sort: null,
+    };
+
+    this.props.getPersons(request);
+  };
+
   render() {
     const progress: number | null = this.props.uploadStatus
       ? this.props.uploadStatus.progress
@@ -38,7 +50,7 @@ class DashboardView extends React.Component<DashboardViewProps, InternalState> {
     return (
       <div>
         <div>Message: {this.props.status || "no message"}</div>
-        <button onClick={this.props.getPersons}>Click me</button>
+        <button onClick={this.handleGetPersons}>Click me</button>
 
         <form onSubmit={this.onFormSubmit}>
           <h1>File Upload: {progress}</h1>

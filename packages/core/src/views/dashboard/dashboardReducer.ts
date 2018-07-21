@@ -4,22 +4,24 @@ import {
   getPersonsSuccess,
   uploadCsvSuccess,
   uploadCsvStatus,
+  IPerson,
 } from "./dashboardActions";
 import { AsyncAction } from "redux-loading-promise-middleware";
-import { RequestStatus } from "../../gateway/Api";
+import { RequestStatus, Page, RequestResponse } from "../../gateway/Api";
 
 class State {
   status: string | null = null;
   upload: any = null;
   uploadStatus: RequestStatus | undefined;
   error = null;
+  persons: Page<IPerson>[] | null = null;
 }
 
 export default handleActions<State, any>(
   {
     [getPersonsSuccess.toString()]: (
       state,
-      action: AsyncAction<IGetPersonsResponse>
+      action: AsyncAction<RequestResponse<Page<IPerson>[]>>
     ): State => {
       if (action.isLoading) {
         return {
@@ -34,7 +36,7 @@ export default handleActions<State, any>(
       }
       return {
         ...state,
-        status: action.payload.status,
+        persons: action.payload.data,
         error: null,
       };
     },
