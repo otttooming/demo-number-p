@@ -3,7 +3,8 @@ import * as Koa from "koa";
 import { RenderCtx } from "../components/render";
 import { IController } from "../typings/controller.interface";
 import { IPersonModel, Person, IPerson } from "../models/person";
-import { Pageable } from "@panderalabs/koa-pageable";
+import { PageableRequest } from "../typings/page.interface";
+import PageableResource from "../components/pageableResource";
 
 class SearchController implements IController {
   private Router = new Router({
@@ -11,30 +12,36 @@ class SearchController implements IController {
   });
 
   private renderCtx = new RenderCtx();
+  private pageableResource = new PageableResource();
 
   constructor() {}
 
   public router(): Router {
-    return this.Router.get("/", this.status.bind(this));
+    return this.Router.post("/", this.list.bind(this));
   }
 
-  private async status(ctx: Koa.Context) {
-    const pageable: Pageable = ctx.state.pageable;
+  private async list(ctx: Koa.Context) {
+    const request: PageableRequest = ctx.request.body;
+    const {
+      size = this.pageableResource.size,
+      number = this.pageableResource.number,
+    }: PageableRequest = request;
+
+    const totalElements: number = await Person.find({}).count();
 
     const books: Array<IPersonModel> = await Person.find({})
-      .limit(pageable.size)
-      .skip(pageable.page);
+      .limit(size)
+      .skip(number);
 
     const booksData: Array<IPerson> = books.map((book: IPersonModel) =>
       book.toPlainObject()
     );
 
-    const renderData = {
-      body: "Hello world!",
-      booksData,
-    };
+    this.pageableResource.setPage(request, booksData, totalElements);
 
-    this.renderCtx.renderSuccess(ctx, 200, "status", renderData);
+    const data = this.pageableResource.createPage();
+
+    this.renderCtx.renderSuccess(ctx, 200, "status", data);
   }
 }
 
