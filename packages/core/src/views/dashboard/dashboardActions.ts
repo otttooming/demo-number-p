@@ -33,7 +33,7 @@ export const getPersons = (request: PageableRequest) => {
       dispatch(getPersonsRequest());
 
       const response: RequestResponse<
-        Page<IPerson>[]
+        Page<IPerson>
       > = await gw.persons.getPersons(request);
 
       dispatch(getPersonsSuccess(response));

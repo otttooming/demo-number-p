@@ -14,14 +14,14 @@ class State {
   upload: any = null;
   uploadStatus: RequestStatus | undefined;
   error = null;
-  persons: Page<IPerson>[] | null = null;
+  persons: Page<IPerson> | null = null;
 }
 
 export default handleActions<State, any>(
   {
     [getPersonsSuccess.toString()]: (
       state,
-      action: AsyncAction<RequestResponse<Page<IPerson>[]>>
+      action: AsyncAction<RequestResponse<Page<IPerson>>>
     ): State => {
       if (action.isLoading) {
         return {
