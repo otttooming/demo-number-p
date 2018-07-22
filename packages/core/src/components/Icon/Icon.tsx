@@ -4,6 +4,7 @@ import * as IconComponent from "./Icons";
 
 export enum IconType {
   SEARCH = "SEARCH",
+  UPLOAD = "UPLOAD",
 }
 
 export interface IconProps {
@@ -19,6 +20,8 @@ export default class Icon extends React.Component<IconProps, {}> {
     switch (icon) {
       case IconType.SEARCH:
         return <IconComponent.SearchIcon />;
+      case IconType.UPLOAD:
+        return <IconComponent.UploadIcon />;
       default:
         return null;
     }

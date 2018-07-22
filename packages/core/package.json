@@ -16,6 +16,7 @@
     "axios": "^0.18.0",
     "react": "16.4.1",
     "react-dom": "16.4.1",
+    "react-dropzone": "^4.2.13",
     "react-redux": "5.0.7",
     "redux-actions": "2.4.0",
     "redux-loading-promise-middleware": "2.0.0",
@@ -26,6 +27,7 @@
   "devDependencies": {
     "@types/react": "16.4.6",
     "@types/react-dom": "16.0.6",
+    "@types/react-dropzone": "^4.2.0",
     "@types/react-redux": "6.0.4",
     "@types/redux-actions": "^2.3.0",
     "@types/webpack": "4.4.6",

@@ -10,6 +10,7 @@ import Container, {
 import Flex from "../../components/Grid/Flex/Flex";
 import Box from "../../components/Grid/Box/Box";
 import { IconType } from "../../components/Icon/Icon";
+import Upload from "../../components/Upload/Upload";
 
 export interface StateProps {
   status: string | null;
@@ -96,6 +97,7 @@ class DashboardView extends React.Component<DashboardViewProps, InternalState> {
   };
 
   renderHeaderAction = () => {
+    const { uploadCsv } = this.props;
     const { isUploadShowing } = this.state;
     const progress: number | null = this.props.uploadStatus
       ? this.props.uploadStatus.progress
@@ -103,11 +105,22 @@ class DashboardView extends React.Component<DashboardViewProps, InternalState> {
 
     if (isUploadShowing) {
       return (
-        <form onSubmit={this.onFormSubmit}>
-          <h1>File Upload: {progress}</h1>
-          <input type="file" onChange={this.onChange} />
-          <button type="submit">Upload</button>
-        </form>
+        <Upload
+          accept="text/csv,.csv"
+          progress={progress}
+          description={<span>Upload CSV</span>}
+          onDropAccepted={(acceptedFiles: File[]) => {
+            uploadCsv(acceptedFiles[0]);
+          }}
+          onDropRejected={(
+            rejected: any,
+            event: React.DragEvent<HTMLDivElement>
+          ) => {
+            alert(
+              "selected files were rejected (probably too big or wrong type)"
+            );
+          }}
+        />
       );
     }
 
