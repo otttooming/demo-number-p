@@ -39,10 +39,13 @@ function getColor(color: Color): string {
 }
 
 const CardWrapper = styled.section<CardTheme>`
+  display: flex;
   position: relative;
   border-radius: ${props => props.theme.border.radius.normal};
   padding: 16px;
   margin-bottom: 16px;
+  margin-left: 32px;
+  margin-top: -64px;
   background: ${props => {
     const { color } = props;
 
@@ -67,11 +70,29 @@ const CardWrapper = styled.section<CardTheme>`
   }
 `;
 
+const CardInfo = styled.section<CardTheme>`
+  position: relative;
+  border-radius: ${props => props.theme.border.radius.normal};
+  padding: 16px;
+  margin-bottom: 16px;
+  background: ${props => {
+    const { color } = props;
+
+    return getColor(color);
+  }};
+  margin-left: -48px;
+  margin-right: 32px;
+  height: 12rem;
+  width: 12rem;
+  min-width: 12rem;
+`;
+
 const CardContent = styled.div`
   background: red;
   border-radius: 8px;
-  padding: 16px;
-  background: linear-gradient(to right, #e0eafc, #cfdef3);
+  padding: 48px;
+  background: linear-gradient(to right, #f9fafb, #f9fafb);
+  width: 100%;
 `;
 
 const CardTitle = styled.h2``;
@@ -99,6 +120,8 @@ export default class Card extends React.Component<CardProps, {}> {
 
     return (
       <CardWrapper color={theme.color}>
+        <CardInfo color={theme.color} />
+
         <CardContent>
           <CardTitle>{title}</CardTitle>
 

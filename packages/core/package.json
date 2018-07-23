@@ -14,9 +14,11 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "downshift": "^2.0.17",
     "react": "16.4.1",
     "react-dom": "16.4.1",
     "react-dropzone": "^4.2.13",
+    "react-popper": "^1.0.0",
     "react-redux": "5.0.7",
     "redux-actions": "2.4.0",
     "redux-loading-promise-middleware": "2.0.0",

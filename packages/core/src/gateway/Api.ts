@@ -12,6 +12,7 @@ export interface PageableRequest {
   number: number | undefined;
   size: number | undefined;
   sort: any | undefined;
+  query?: { [name: string]: any };
 }
 
 export interface Page<T = any> {

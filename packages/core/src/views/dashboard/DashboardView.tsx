@@ -11,6 +11,8 @@ import Flex from "../../components/Grid/Flex/Flex";
 import Box from "../../components/Grid/Box/Box";
 import { IconType } from "../../components/Icon/Icon";
 import Upload from "../../components/Upload/Upload";
+import { Popover } from "../../components/Popover/Popover";
+import Select, { SelectItemProps } from "../../components/Select/Select";
 
 export interface StateProps {
   status: string | null;
@@ -28,6 +30,8 @@ export type DashboardViewProps = StateProps & DispatchProps;
 
 interface InternalState {
   isUploadShowing: boolean;
+  selectedPerson: string | null;
+  showAllPersons: boolean;
 }
 
 class DashboardView extends React.Component<DashboardViewProps, InternalState> {
@@ -36,6 +40,8 @@ class DashboardView extends React.Component<DashboardViewProps, InternalState> {
 
     this.state = {
       isUploadShowing: false,
+      selectedPerson: null,
+      showAllPersons: false,
     };
   }
 
@@ -47,10 +53,43 @@ class DashboardView extends React.Component<DashboardViewProps, InternalState> {
     this.props.uploadCsv(e.target.files[0]);
   };
 
-  handleGetPersons = () => {
+  handleSelectChange = (selected: SelectItemProps) => {
+    this.setState({
+      selectedPerson: selected.value,
+      showAllPersons: false,
+    });
+  };
+
+  handleSelectInputChange = (inputValue: string) => {
     const request: PageableRequest = {
       size: 30,
       number: 1,
+      sort: null,
+      query: { name: inputValue },
+    };
+
+    this.props.getPersons(request);
+  };
+
+  handleGetAllPersons = async (page: number = 0) => {
+    const request: PageableRequest = {
+      size: 20,
+      number: 0,
+      sort: null,
+    };
+
+    await this.props.getPersons(request);
+
+    this.setState({
+      selectedPerson: null,
+      showAllPersons: true,
+    });
+  };
+
+  handleGetPersons = () => {
+    const request: PageableRequest = {
+      size: 20,
+      number: 0,
       sort: null,
     };
 
@@ -78,7 +117,27 @@ class DashboardView extends React.Component<DashboardViewProps, InternalState> {
       content: person.address,
     });
 
+    meta.push({
+      label: "Team",
+      content: person.team,
+    });
+
     return meta;
+  };
+
+  createSelectItems = (): SelectItemProps[] => {
+    const { persons } = this.props;
+
+    if (!persons || !persons.content) {
+      return [];
+    }
+
+    return persons.content.map(item => {
+      return {
+        label: item.name,
+        value: item.name,
+      };
+    });
   };
 
   createPersonThemeColor = (color: string): Color => {
@@ -126,8 +185,11 @@ class DashboardView extends React.Component<DashboardViewProps, InternalState> {
 
     return (
       <div>
-        <div>Message: {this.props.status || "no message"}</div>
-        <Button onClick={this.handleGetPersons}>Click me</Button>
+        <Select
+          items={this.createSelectItems()}
+          onChange={this.handleSelectChange}
+          onInputChange={this.handleSelectInputChange}
+        />
       </div>
     );
   };
@@ -139,29 +201,34 @@ class DashboardView extends React.Component<DashboardViewProps, InternalState> {
       return null;
     }
 
-    return persons.content.map((item, index) => {
-      const { name, team } = item;
+    const selectedPerson: IPerson | undefined = persons.content.find(
+      item => item.name === this.state.selectedPerson
+    );
 
-      const theme: CardTheme = {
-        color: this.createPersonThemeColor(team),
-      };
+    if (!selectedPerson) {
+      return null;
+    }
 
-      return (
-        <Card
-          key={index}
-          title={name}
-          theme={theme}
-          meta={this.createPersonMeta(item)}
-        />
-      );
-    });
+    const { name, team } = selectedPerson;
+
+    const theme: CardTheme = {
+      color: this.createPersonThemeColor(team),
+    };
+
+    return (
+      <Card
+        title={name}
+        theme={theme}
+        meta={this.createPersonMeta(selectedPerson)}
+      />
+    );
   };
 
   render() {
     return (
-      <div>
+      <>
         <Container variant={ContainerVariant.HERO}>
-          <Flex>
+          <Flex verticalCenter={true}>
             <Box width={2 / 12}>
               <Button
                 icon={IconType.SEARCH}
@@ -174,8 +241,15 @@ class DashboardView extends React.Component<DashboardViewProps, InternalState> {
           </Flex>
         </Container>
 
-        <Container>{this.renderPersons()}</Container>
-      </div>
+        <Container>
+          <Flex>
+            <Box width={2 / 12}>
+              <Button onClick={this.handleGetAllPersons}>Show all</Button>
+            </Box>
+            <Box width={10 / 12}>{this.renderPersons()}</Box>
+          </Flex>
+        </Container>
+      </>
     );
   }
 }
