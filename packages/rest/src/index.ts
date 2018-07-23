@@ -10,6 +10,7 @@ import * as koaBody from "koa-body";
 import * as cors from "@koa/cors";
 import MongooseLib from "./components/mongoose";
 import { Pageable, IndexedPage, paginate } from "@panderalabs/koa-pageable";
+import * as serve from "koa-static";
 
 class Server {
   public app: Koa;
@@ -24,6 +25,7 @@ class Server {
   }
 
   private middelwares() {
+    this.app.use(serve("./static"));
     this.app.use(koaBody({ multipart: true }));
     this.app.use(paginate);
     this.app.use(cors({ origin: "*" }));
