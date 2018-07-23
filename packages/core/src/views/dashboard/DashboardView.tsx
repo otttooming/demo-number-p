@@ -62,11 +62,13 @@ class DashboardView extends React.Component<DashboardViewProps, InternalState> {
     });
   };
 
-  handleSelectChange = (selected: SelectItemProps) => {
-    this.setState({
+  handleSelectChange = async (selected: SelectItemProps) => {
+    await this.setState({
       selectedPerson: selected.value,
       showAllPersons: false,
     });
+
+    await this.handleGetPerson(selected.value);
   };
 
   handleSelectInputChange = (inputValue: string) => {
@@ -80,22 +82,7 @@ class DashboardView extends React.Component<DashboardViewProps, InternalState> {
     this.props.getPersons(request);
   };
 
-  handleGetAllPersons = async (page: number = 0) => {
-    const request: PageableRequest = {
-      size: 20,
-      number: 0,
-      sort: null,
-    };
-
-    await this.props.getPersons(request);
-
-    this.setState({
-      selectedPerson: null,
-      showAllPersons: true,
-    });
-  };
-
-  handleGetPersons = () => {
+  handleGetAllPersons = (page: number = 0) => {
     const request: PageableRequest = {
       size: 20,
       number: 0,
@@ -103,6 +90,22 @@ class DashboardView extends React.Component<DashboardViewProps, InternalState> {
     };
 
     this.props.getPersons(request);
+
+    this.setState({
+      selectedPerson: null,
+      showAllPersons: true,
+    });
+  };
+
+  handleGetPerson = async (name: string) => {
+    const request: PageableRequest = {
+      size: 20,
+      number: 0,
+      sort: null,
+      query: { name },
+    };
+
+    await this.props.getPersons(request);
   };
 
   handleHeaderActionSwitch = (): void => {
@@ -267,7 +270,7 @@ class DashboardView extends React.Component<DashboardViewProps, InternalState> {
         <Container>
           <Flex>
             <Box width={2 / 12}>
-              <Button onClick={this.handleGetAllPersons}>Show all</Button>
+              {/* <Button onClick={this.handleGetAllPersons}>Show all</Button> */}
             </Box>
             <Box width={10 / 12}>{this.renderPersons()}</Box>
           </Flex>
