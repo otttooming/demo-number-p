@@ -25,11 +25,13 @@ class SearchController implements IController {
     const {
       size = this.pageableResource.size,
       number = this.pageableResource.number,
+      query,
     }: PageableRequest = request;
 
     const totalElements: number = await Person.find({}).count();
+    const modelQuery = !query ? {} : { name: new RegExp(query.name, "i") };
 
-    const books: Array<IPersonModel> = await Person.find({})
+    const books: Array<IPersonModel> = await Person.find(modelQuery)
       .limit(size)
       .skip(number);
 
