@@ -10,7 +10,9 @@
   ],
   "scripts": {
     "dev": "webpack-dev-server --host 0.0.0.0 --port 3000 --mode development",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --no-cache",
+    "test:watch": "jest --watch",
+    "test:update": " jest -u",
     "build": "webpack",
     "clean": "rimraf dist",
     "dist": "npm run clean && npm run build"
@@ -30,19 +32,60 @@
     "styled-components": "^3.3.3"
   },
   "devDependencies": {
+    "@types/enzyme": "^3.1.12",
+    "@types/enzyme-adapter-react-16": "^1.0.2",
+    "@types/enzyme-to-json": "^1.5.1",
+    "@types/jest": "^23.3.0",
+    "@types/puppeteer": "^1.5.1",
     "@types/react": "16.4.6",
     "@types/react-dom": "16.0.6",
     "@types/react-dropzone": "^4.2.0",
     "@types/react-redux": "6.0.4",
     "@types/redux-actions": "^2.3.0",
+    "@types/rimraf": "^2.0.2",
     "@types/webpack": "4.4.6",
     "@types/webpack-dev-server": "2.9.5",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "enzyme-to-json": "^3.3.4",
+    "jest": "^23.4.1",
+    "jest-cli": "^23.4.1",
+    "jest-puppeteer": "^3.2.1",
+    "puppeteer": "^1.6.0",
     "rimraf": "^2.6.2",
     "source-map-loader": "0.2.3",
+    "ts-jest": "^23.0.1",
     "ts-loader": "4.4.2",
     "typescript": "2.9.2",
     "webpack": "4.16.0",
     "webpack-cli": "3.0.8",
     "webpack-dev-server": "3.1.4"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "moduleNameMapper": {
+      "coterminous-styled": "<rootDir>/src/index.ts"
+    },
+    "transform": {
+      "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "moduleDirectories": [
+      "node_modules"
+    ],
+    "verbose": true,
+    "bail": false,
+    "collectCoverage": true,
+    "setupTestFrameworkScriptFile": "<rootDir>/src/common/testHelpers/setupTestFrameworkScriptFile.ts",
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ]
   }
 }
