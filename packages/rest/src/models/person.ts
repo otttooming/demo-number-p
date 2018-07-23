@@ -20,6 +20,7 @@ const personSchema: Schema = new Schema({
   personId: {
     type: Number,
     required: "PersonID is required",
+    unique: true,
   },
   name: {
     type: String,

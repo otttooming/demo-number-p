@@ -85,9 +85,13 @@ class ImportController implements IController {
   };
 
   private create = async (person: IPerson) => {
-    const personEntry: IPersonModel = new Person(person);
+    try {
+      const personEntry: IPersonModel = new Person(person);
 
-    await personEntry.save();
+      await personEntry.save();
+    } catch (err) {
+      console.log(err);
+    }
   };
 }
 
