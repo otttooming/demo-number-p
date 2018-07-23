@@ -93,6 +93,7 @@ export default class SelectBase extends React.Component<SelectProps, State> {
                       ref={ref}
                       {...getInputProps()}
                       onFocus={this.handleFocus(setState)}
+                      placeholder="Search for people"
                     />
                   </SelectInput>
                 )}

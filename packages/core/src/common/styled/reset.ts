@@ -99,6 +99,7 @@ export const reset = css`
   [type="button"],
   [type="reset"],
   [type="submit"] {
+    cursor: pointer;
     -webkit-appearance: button;
   }
   ::-moz-focus-inner {

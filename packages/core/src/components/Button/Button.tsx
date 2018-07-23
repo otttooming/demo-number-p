@@ -5,9 +5,10 @@ import Icon, { IconType } from "../Icon/Icon";
 export interface ButtonProps {
   onClick?: () => void;
   icon?: IconType;
+  id?: string;
 }
 
-const ButtonWrapper = styled.button`
+const ButtonWrapper = styled.button<{ icon?: IconType }>`
   border-radius: ${props => props.theme.border.radius.normal};
   -webkit-appearance: none;
   border: none;
@@ -18,8 +19,9 @@ const ButtonWrapper = styled.button`
   background: #374ad4;
   color: #fff;
   outline: none;
+  min-height: ${props => (props.icon ? "128px" : "64px")};
   min-width: 64px;
-  padding: 32px;
+  padding: 24px 32px;
   font-size: ${props => props.theme.typeface.size.normal};
 `;
 
@@ -40,10 +42,10 @@ export default class Button extends React.Component<ButtonProps, {}> {
   };
 
   render() {
-    const { children, icon } = this.props;
+    const { children, icon, id } = this.props;
 
     return (
-      <ButtonWrapper onClick={this.handleClick}>
+      <ButtonWrapper onClick={this.handleClick} icon={icon} id={id}>
         {icon && <Icon icon={icon} />}
         <ButtonContent>{children}</ButtonContent>
       </ButtonWrapper>

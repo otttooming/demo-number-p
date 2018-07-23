@@ -23,16 +23,16 @@ export interface CardProps {
   theme: CardTheme;
 }
 
-function getColor(color: Color): string {
+function getColor(color: Color, solid?: boolean): string {
   switch (color) {
     case Color.BLUE:
-      return "linear-gradient(to right, #8e2de2, #4a00e0)";
+      return solid ? "#4a00e0" : "linear-gradient(to right, #8e2de2, #4a00e0)";
     case Color.WHITE:
-      return "linear-gradient(to right, #d3cce3, #e9e4f0)";
+      return solid ? "#E9E4F0" : "linear-gradient(to right, #D3CCE3, #E9E4F0)";
     case Color.GREEN:
-      return "linear-gradient(to right, #00b09b, #96c93d)";
+      return solid ? "#96c93d" : "linear-gradient(to right, #00b09b, #96c93d)";
     case Color.YELLOW:
-      return "linear-gradient(to right, #f7971e, #ffd200)";
+      return solid ? "#ffd200" : "linear-gradient(to right, #f7971e, #ffd200)";
     default:
       return "#fff";
   }
@@ -78,7 +78,7 @@ const CardInfo = styled.section<CardTheme>`
   background: ${props => {
     const { color } = props;
 
-    return getColor(color);
+    return getColor(color, true);
   }};
   margin-left: -48px;
   margin-right: 32px;

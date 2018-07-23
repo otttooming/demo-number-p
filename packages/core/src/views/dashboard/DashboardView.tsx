@@ -7,7 +7,7 @@ import Button from "../../components/Button/Button";
 import Container, {
   ContainerVariant,
 } from "../../components/Container/Container";
-import Flex from "../../components/Grid/Flex/Flex";
+import Flex, { HorizontalAlignment } from "../../components/Grid/Flex/Flex";
 import Box from "../../components/Grid/Box/Box";
 import { IconType } from "../../components/Icon/Icon";
 import Upload from "../../components/Upload/Upload";
@@ -32,6 +32,7 @@ interface InternalState {
   isUploadShowing: boolean;
   selectedPerson: string | null;
   showAllPersons: boolean;
+  csv: File | null;
 }
 
 class DashboardView extends React.Component<DashboardViewProps, InternalState> {
@@ -42,15 +43,23 @@ class DashboardView extends React.Component<DashboardViewProps, InternalState> {
       isUploadShowing: false,
       selectedPerson: null,
       showAllPersons: false,
+      csv: null,
     };
   }
 
-  onFormSubmit(e: any) {
-    e.preventDefault();
-  }
+  handleCsvSubmit = (): void => {
+    const { uploadCsv } = this.props;
+    const { csv } = this.state;
 
-  onChange = (e: any) => {
-    this.props.uploadCsv(e.target.files[0]);
+    if (csv) {
+      uploadCsv(csv);
+    }
+  };
+
+  handleCsvDropAccepted = (acceptedFiles: File[]): void => {
+    this.setState({
+      csv: acceptedFiles[0],
+    });
   };
 
   handleSelectChange = (selected: SelectItemProps) => {
@@ -145,7 +154,7 @@ class DashboardView extends React.Component<DashboardViewProps, InternalState> {
       case "BLUE":
         return Color.BLUE;
       case "WHITE":
-        return Color.BLUE;
+        return Color.WHITE;
       case "GREEN":
         return Color.GREEN;
       case "YELLOW":
@@ -169,7 +178,7 @@ class DashboardView extends React.Component<DashboardViewProps, InternalState> {
           progress={progress}
           description={<span>Upload CSV</span>}
           onDropAccepted={(acceptedFiles: File[]) => {
-            uploadCsv(acceptedFiles[0]);
+            this.handleCsvDropAccepted(acceptedFiles);
           }}
           onDropRejected={(
             rejected: any,
@@ -225,6 +234,7 @@ class DashboardView extends React.Component<DashboardViewProps, InternalState> {
   };
 
   render() {
+    const { isUploadShowing } = this.state;
     return (
       <>
         <Container variant={ContainerVariant.HERO}>
@@ -237,7 +247,20 @@ class DashboardView extends React.Component<DashboardViewProps, InternalState> {
                 Switch
               </Button>
             </Box>
-            <Box width={10 / 12}>{this.renderHeaderAction()}</Box>
+            <Box width={isUploadShowing ? 8 / 12 : 10 / 12}>
+              {this.renderHeaderAction()}
+            </Box>
+            {isUploadShowing && (
+              <Box width={2 / 12}>
+                <Flex horizontalAlignment={HorizontalAlignment.RIGHT}>
+                  {isUploadShowing && (
+                    <Button id="uploadButton" onClick={this.handleCsvSubmit}>
+                      Submit
+                    </Button>
+                  )}
+                </Flex>
+              </Box>
+            )}
           </Flex>
         </Container>
 

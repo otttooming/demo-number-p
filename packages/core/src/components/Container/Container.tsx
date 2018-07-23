@@ -16,6 +16,8 @@ export interface ContainerWrapperProps {
 const Hero = css`
   background: linear-gradient(to right, #3741ea, #4462ee);
   color: #fff;
+  padding-top: 24px;
+  padding-bottom: 64px;
 `;
 
 const ContainerWrapper = styled.section<ContainerWrapperProps>`

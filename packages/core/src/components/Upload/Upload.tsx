@@ -16,12 +16,19 @@ const UploadWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  .upload__dropzone {
+    min-height: 120px;
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 const UploadContent = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 120px;
 `;
 
 const Description = styled.div``;
@@ -65,6 +72,11 @@ export default class Upload extends React.Component<UploadProps> {
       onDropRejected,
       description,
     } = this.props;
+
+    const inputProps: React.InputHTMLAttributes<HTMLInputElement> = {
+      id: "uploadField",
+    };
+
     return (
       <UploadWrapper>
         <Dropzone
@@ -76,6 +88,7 @@ export default class Upload extends React.Component<UploadProps> {
           multiple={multiple}
           className="upload__dropzone"
           activeClassName="upload__dropzone--active"
+          inputProps={inputProps}
         >
           <UploadContent>
             {this.renderIllustration()}
