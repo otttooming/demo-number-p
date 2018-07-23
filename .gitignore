@@ -60,8 +60,5 @@ jspm_packages/
 # Jest coverage report
 coverage/
 
-# TypeScript compiled target
-dist/
-
 # WebStorm/IntelliJ
 .idea/
