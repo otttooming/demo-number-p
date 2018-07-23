@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Dispatchable0, Dispatchable1 } from "redux-dispatchers";
 import { RequestStatus, PageableRequest, Page } from "../../gateway/Api";
-import { IPerson } from "./dashboardActions";
+import { IPerson, IndexedPersons } from "./dashboardActions";
 import Card, { CardMeta, Color, CardTheme } from "../../components/Card/Card";
 import Button from "../../components/Button/Button";
 import Container, {
@@ -18,7 +18,7 @@ export interface StateProps {
   status: string | null;
   upload: any;
   uploadStatus: RequestStatus | undefined;
-  persons: Page<IPerson> | null;
+  persons: IndexedPersons | null;
 }
 
 export interface DispatchProps {
@@ -36,6 +36,8 @@ interface InternalState {
 }
 
 class DashboardView extends React.Component<DashboardViewProps, InternalState> {
+  private pageSize: number = 20;
+
   constructor(props: DashboardViewProps) {
     super(props);
 
@@ -140,14 +142,17 @@ class DashboardView extends React.Component<DashboardViewProps, InternalState> {
   createSelectItems = (): SelectItemProps[] => {
     const { persons } = this.props;
 
-    if (!persons || !persons.content) {
+    if (!persons) {
       return [];
     }
 
-    return persons.content.map(item => {
+    const personsArray: IPerson[] = Object.values(persons);
+
+    return personsArray.map((item, index, arr) => {
       return {
         label: item.name,
         value: item.name,
+        searchTerms: [{ label: item.name }],
       };
     });
   };
@@ -198,6 +203,7 @@ class DashboardView extends React.Component<DashboardViewProps, InternalState> {
     return (
       <div>
         <Select
+          resultLimit={this.pageSize}
           items={this.createSelectItems()}
           onChange={this.handleSelectChange}
           onInputChange={this.handleSelectInputChange}
@@ -213,7 +219,7 @@ class DashboardView extends React.Component<DashboardViewProps, InternalState> {
       return null;
     }
 
-    const selectedPerson: IPerson | undefined = persons.content.find(
+    const selectedPerson: IPerson | undefined = Object.values(persons).find(
       item => item.name === this.state.selectedPerson
     );
 

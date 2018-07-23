@@ -5,6 +5,7 @@ import {
   uploadCsvSuccess,
   uploadCsvStatus,
   IPerson,
+  IndexedPersons,
 } from "./dashboardActions";
 import { AsyncAction } from "redux-loading-promise-middleware";
 import { RequestStatus, Page, RequestResponse } from "../../gateway/Api";
@@ -14,7 +15,7 @@ class State {
   upload: any = null;
   uploadStatus: RequestStatus | undefined;
   error = null;
-  persons: Page<IPerson> | null = null;
+  persons: IndexedPersons | null = null;
 }
 
 export default handleActions<State, any>(
@@ -34,9 +35,15 @@ export default handleActions<State, any>(
           error: action.error,
         };
       }
+
+      const persons: IndexedPersons = { ...state.persons };
+      action.payload.data.content.forEach(item => {
+        persons[item.personId] = item;
+      });
+
       return {
         ...state,
-        persons: action.payload.data,
+        persons,
         error: null,
       };
     },

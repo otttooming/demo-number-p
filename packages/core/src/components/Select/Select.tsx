@@ -31,6 +31,7 @@ export interface SelectItemProps {
 }
 export interface Props {
   items: SelectItemProps[];
+  resultLimit?: number;
   onChange?: (value: SelectItemProps | undefined) => void;
   onInputChange?: (inputValue: string) => void;
 }
@@ -50,7 +51,14 @@ export enum SELECT_GROUP {
 }
 
 export default class SelectBase extends React.Component<SelectProps, State> {
+  private resultLimit: number | undefined;
   state: State = { selected: undefined };
+
+  constructor(props: SelectProps) {
+    super(props);
+
+    this.resultLimit = props.resultLimit;
+  }
 
   render() {
     const { items } = this.props;
@@ -123,6 +131,9 @@ export default class SelectBase extends React.Component<SelectProps, State> {
 
     const reduc: SelectGroupedNodes = items
       .filter(this.getFilteredResults(inputValue))
+      .filter(
+        (item, index) => (this.resultLimit ? index < this.resultLimit : true)
+      )
       .reduce((acc, cur, index) => {
         const item: JSX.Element = this.renderSelectItem(options, cur, index);
 

@@ -18,6 +18,8 @@ export interface IPerson {
   team: string;
 }
 
+export type IndexedPersons =  { [key: string]: IPerson };
+
 export interface IGetPersonsResponse {
   status: string;
   data?: any;
