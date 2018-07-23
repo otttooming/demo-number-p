@@ -5,11 +5,11 @@
 Install
 
 ```
-$ npm run bootstrap
+$ npm install
 ```
 
 Start
 
 ```
-$ npm run dev
+$ npm run start
 ```
