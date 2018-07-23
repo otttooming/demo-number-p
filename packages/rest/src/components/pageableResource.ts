@@ -18,7 +18,7 @@ export default class PageableResource<T = any> implements Page<T> {
   ): void {
     const size: number = request.size ? request.size : this.size;
     const numberOfElements: number = content.length;
-    const totalPages: number = totalElements / size;
+    const totalPages: number = Math.ceil(totalElements / size);
 
     this.content = content;
     this.size = size;
