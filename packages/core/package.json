@@ -13,6 +13,7 @@
     "test": "jest --no-cache",
     "test:watch": "jest --watch",
     "test:update": " jest -u",
+    "test:integration": "jest -c jest.config.js",
     "build": "webpack",
     "clean": "rimraf dist",
     "dist": "npm run clean && npm run build"
